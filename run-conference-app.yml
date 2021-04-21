@@ -11,12 +11,12 @@
       when: conference_id.stdout != ""
 
     - name: Docker image exists
-      shell:  docker images | grep 'conference-app'
+      shell:  docker images | grep 'aderesnes/conference-app'
       register: image
       ignore_errors: yes
 
     - name: Delete image if exist
-      shell:  docker rmi -f $(docker images |grep 'conference-app')
+      shell:  docker rmi -f $(docker images |grep 'aderesnes/conference-app')
       when: image.stdout != ""
       ignore_errors: yes
 
