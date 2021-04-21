@@ -59,7 +59,7 @@ pipeline {
         }
         stage('Push Container to Docker Hub') {
           steps {
-            withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'USER_PASSWORD', usernameVariable: 'USER_NAME')]) {
+            withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'USER_PASSWORD', usernameVariable: 'USER_NAME')]) {
             script {
                  def set_dockerhub = sh(script: ''' docker login -u $USER_NAME -p $USER_PASSWORD
                                                     docker image tag conference-app aderesnes/conference-app
