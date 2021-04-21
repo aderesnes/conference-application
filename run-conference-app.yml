@@ -16,9 +16,9 @@
       ignore_errors: yes
 
     - name: Delete image if exist
-      shell:  docker rmi -f  $(docker images |grep 'conference-app')
+      shell:  docker rmi -f $(docker images |grep 'conference-app')
       when: image.stdout != ""
       ignore_errors: yes
 
     - name: Start test container
-      shell: docker run -d --name conference-test -p 10100:8080 aderesnes/conference-app
+      shell: docker run -d --name conference-app -p 10100:8080 aderesnes/conference-app
