@@ -3,18 +3,22 @@
   hosts: ubuntu15
   tasks:
     - name: Docker test exists
-      shell: docker ps --all --quiet --filter=name="conference-test"
+      shell: docker ps --all --quiet --filter=name="conference-app"
       register: conference_id
+
     - name: Delete container if exist
-      shell: docker rm -f conference-test
+      shell: docker rm -f conference-app
       when: conference_id.stdout != ""
+
     - name: Docker image exists
       shell:  docker images | grep 'conference-app'
       register: image
       ignore_errors: yes
+
     - name: Delete image if exist
       shell:  docker rmi -f  $(docker images |grep 'conference-app')
       when: image.stdout != ""
       ignore_errors: yes
+
     - name: Start test container
       shell: docker run -d --name conference-test -p 10100:8080 systemdevformations/conference-app

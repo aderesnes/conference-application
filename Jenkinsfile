@@ -40,12 +40,12 @@ pipeline {
         stage('Run  conference-app Docker ') {
           steps {
                 script {
-                 def set_container = sh(script: ''' CONTAINER_NAME="conference-app-test"
+                 def set_container = sh(script: ''' CONTAINER_NAME="conference-app"
                                                     OLD="$(docker ps --all --quiet --filter=name="$CONTAINER_NAME")"
                                                     if [ -n "$OLD" ]; then
                                                         docker rm -f $OLD
                                                     fi
-                                                    docker run -d --name conference-app-test -p 10090:8080 conference-app
+                                                    docker run -d --name conference-app -p 10090:8080 conference-app
                                          ''')
                }
             }
@@ -62,8 +62,8 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'USER_PASSWORD', usernameVariable: 'USER_NAME')]) {
             script {
                  def set_dockerhub = sh(script: ''' docker login -u $USER_NAME -p $USER_PASSWORD
-                                                    docker image tag conference-app systemdevformations/conference-app
-                                                    docker push systemdevformations/conference-app
+                                                    docker image tag conference-app aderesnes/conference-app
+                                                    docker push aderesnes/conference-app
                                                  ''')
                }
              }
@@ -72,7 +72,7 @@ pipeline {
         stage('Run container conference-app on a remote host') {
           steps {
                 ansiColor('xterm') {
-                ansibleTower jobTemplate: 'Conference-app', jobType: 'run', throwExceptionWhenFail: false, towerCredentialsId: 'ansible_awx', towerLogLevel: 'full', towerServer: 'AWX'
+                ansibleTower jobTemplate: 'conference-app', jobType: 'run', throwExceptionWhenFail: false, towerCredentialsId: 'awx', towerLogLevel: 'full', towerServer: 'AWX'
                 }
             }
         }
